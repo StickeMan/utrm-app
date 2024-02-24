@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Food, FoodService} from '../shared';
+import {FoodComponent} from '../food/food.component';
 
 @Component({
   selector: 'app-food-list',
   standalone: true,
-  imports: [],
+  imports: [FoodComponent],
   templateUrl: './food-list.component.html',
   styleUrl: './food-list.component.scss'
 })
