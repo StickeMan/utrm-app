@@ -1,14 +1,98 @@
-<div class="flex flex-col gap-4">
-  <mat-form-field appearance="outline">
-    <mat-label for="name">Nombre de la comida</mat-label>
-    <input matInput placeholder="Ejem. Pizza" id="name" type="text" [formControl]="name">
-    @if (name.valid) {
-      <mat-error>{{ showValue() }}</mat-error>
-    }
-    <mat-icon matSuffix>food</mat-icon>
-  </mat-form-field>
-  <div class="flex gap-4">
-    <button mat-flat-button color="primary" (click)="showValue()">Enviar</button>
-    <button mat-flat-button color="primary" (click)="changeValue()">Cambiar valor</button>
+<form [formGroup]="form" class="max-w-3xl p-4">
+  <!-- CAMPO DE NOMBRE -->
+  <div class="w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput placeholder="Ejemplo Pizza" formControlName="name">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      @if (getName?.invalid && (getName?.dirty || getName?.touched)) {
+        <mat-error>
+          @if (getName?.hasError('required')) {
+            <span class="text-xs">Este campo es requerido</span>
+          }
+        </mat-error>
+      }
+    </mat-form-field>
   </div>
-</div>
+
+  <!-- CAMPO DE DESCRIPCION -->
+  <div class="w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Descripcion</mat-label>
+      <input matInput placeholder="Ejemplo Pizza" formControlName="description">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      @if (getDescription?.invalid && (getDescription?.dirty || getDescription?.touched)) {
+        <mat-error>
+          @if (getDescription?.hasError('required')) {
+            <span class="text-xs">Este campo es requerido</span>
+          }
+          @if (getDescription?.hasError('minlength')) {
+            <span class="text-xs">
+              Minimo de caracteres requeridos es de {{ getDescription?.getError('minlength').requiredLength }}
+              , tienes {{ getDescription?.getError('minlength').actualLength }}
+            </span>
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- CAMPO DE IMAGEN -->
+  <div class="w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>URL de la Imagen</mat-label>
+      <input matInput placeholder="Ejemplo Pizza" formControlName="image">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      @if (getImage?.invalid && (getImage?.dirty || getImage?.touched)) {
+        <mat-error>
+          @if (getImage?.hasError('required')) {
+            <span class="text-xs">Este campo es requerido</span>
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- CAMPO DE CATEGORIA -->
+  <div class="w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Categoria</mat-label>
+      <mat-select formControlName="category">
+        <mat-option [value]="'drink'">Bebida</mat-option>
+        <mat-option [value]="'food'">Comida</mat-option>
+      </mat-select>
+      @if (getCategory?.invalid && (getCategory?.dirty || getCategory?.touched)) {
+        <mat-error>
+          @if (getCategory?.hasError('required')) {
+            <span class="text-xs">Este campo es requerido</span>
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- CAMPO DE PRECIO -->
+  <div class="w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Precio</mat-label>
+      <input matInput placeholder="0" type="number" class="example-right-align" formControlName="price">
+      <span matTextPrefix>$&nbsp;</span>
+      <span matTextSuffix>.00</span>
+      @if (getPrice?.invalid && (getPrice?.dirty || getPrice?.touched)) {
+        <mat-error>
+          @if (getPrice?.hasError('required')) {
+            <span class="text-xs">Este campo es requerido</span>
+          }
+          @if (getPrice?.hasError('min')) {
+            <span class="text-xs">
+              El valor minimo es de {{ getPrice?.getError('min').min }}
+              , el valor actual es de {{ getPrice?.getError('min').actual }}
+            </span>
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="sentData()">Guardar</button>
+</form>

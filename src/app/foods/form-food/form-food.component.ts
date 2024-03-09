@@ -1,13 +1,16 @@
 import {Component} from '@angular/core';
 import {
-  FormControl,
+  FormBuilder,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButton} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {Food, FoodService} from "../shared";
 
 @Component({
   selector: 'app-form-food',
@@ -17,24 +20,67 @@ import {MatButton} from '@angular/material/button';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    MatButton
+    MatButton,
+    FormsModule,
+    MatSelectModule,
   ],
   templateUrl: './form-food.component.html',
-  styleUrl: './form-food.component.css'
+  styleUrl: './form-food.component.scss'
 })
 export class FormFoodComponent {
-  name = new FormControl([Validators.maxLength(20), Validators.required]);
 
-  public showValue() {
-    if (this.name.hasError('required')) {
-      return 'You must enter a value';
-    } else if (this.name.hasError('maxLength')) {
-      return 'Minimo 20 caracteres'
+  form = this.formBuilder.group({
+    name: ['', [Validators.required]],
+    description: ['', [Validators.required, Validators.minLength(20)]],
+    category: ['', [Validators.required]],
+    image: ['', [Validators.required]],
+    price: ['', [Validators.required, Validators.min(2)]],
+  });
+
+  constructor(
+    private formBuilder: FormBuilder,
+    public serviceFood: FoodService,
+  ) {}
+
+  public sentData() {
+    if (this.form.status === 'VALID') {
+      if (
+        this.getName?.value &&
+        this.getDescription?.value &&
+        this.getCategory?.value &&
+        this.getImage?.value &&
+        this.getPrice?.value
+      ) {
+        let priceNumber = Number(this.getPrice?.value);
+        let comida: Food = {
+          name: this.getName?.value,
+          description: this.getDescription?.value,
+          category: this.getCategory?.value,
+          image: this.getImage?.value,
+          price: priceNumber
+        }
+        this.serviceFood.addFood(comida);
+      }
     }
-    return 'Error';
   }
 
-  public changeValue(): void {
-    // this.name.setValue('Pizza de queso')
+  get getName() {
+    return this.form.get('name');
+  }
+
+  get getDescription() {
+    return this.form.get('description');
+  }
+
+  get getCategory() {
+    return this.form.get('category');
+  }
+
+  get getImage() {
+    return this.form.get('image');
+  }
+
+  get getPrice() {
+    return this.form.get('price');
   }
 }

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Food} from './food.model';
-import {CategoryEnum} from './category.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,7 @@ export class FoodService {
       id: 1,
       name: 'pizza',
       description: 'Pepperoni',
-      category: CategoryEnum.food,
+      category: 'food',
       image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
       price: 234,
     },
@@ -20,7 +19,7 @@ export class FoodService {
       id: 2,
       name: 'pizza',
       description: 'Pepperoni',
-      category: CategoryEnum.food,
+      category: 'food',
       image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
       price: 234,
     },
@@ -28,7 +27,7 @@ export class FoodService {
       id: 3,
       name: 'pizza',
       description: 'Pepperoni',
-      category: CategoryEnum.food,
+      category: 'food',
       image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
       price: 234,
     },
@@ -36,7 +35,7 @@ export class FoodService {
       id: 4,
       name: 'pizza',
       description: 'Pepperoni',
-      category: CategoryEnum.food,
+      category: 'food',
       image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
       price: 234,
     },
@@ -44,7 +43,7 @@ export class FoodService {
       id: 5,
       name: 'pizza',
       description: 'Pepperoni',
-      category: CategoryEnum.food,
+      category: 'food',
       image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
       price: 234,
     },
@@ -52,7 +51,7 @@ export class FoodService {
       id: 6,
       name: 'pizza',
       description: 'Pepperoni',
-      category: CategoryEnum.food,
+      category: 'food',
       image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
       price: 234,
     },
@@ -61,7 +60,31 @@ export class FoodService {
   constructor() {
   }
 
+  // * Get all food.
   public getAllFood(): Food[] {
     return this.menu;
+  }
+
+  // * Add new food.
+  public addFood(food: Food){
+    this.menu.push(food);
+  }
+
+  // * Update food.
+  public updateFood(newFood: Food) {
+    this.menu.forEach((food, index) => {
+      if (food.id == newFood.id) {
+        food = newFood;
+      }
+    })
+  }
+
+  // * Delete food.
+  public deleteFood(deletedFood: Food) {
+    this.menu.forEach((food, index) => {
+      if (food.id == deletedFood.id) {
+        this.menu.splice(index, 1);
+      }
+    })
   }
 }
