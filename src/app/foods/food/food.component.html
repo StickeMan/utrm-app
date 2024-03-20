@@ -6,9 +6,10 @@
       <mat-card-subtitle>{{ food.price | currency:'MXN' }} | {{ food.category | titlecase }}</mat-card-subtitle>
       <p>{{ food.description }}</p>
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>SHARE</button>
+    <mat-card-actions class="flex gap-4">
+      <button mat-raised-button color="primary" [routerLink]="['/food/form', food.id]">Actualizar</button>
+      <button mat-raised-button color="warn" (click)="deleteFood(food)">Eliminar</button>
+      <button mat-raised-button color="accent" [routerLink]="['/food/details-food', food.id]">Ver más</button>
     </mat-card-actions>
   </mat-card>
 }
