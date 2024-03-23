@@ -1,4 +1,7 @@
 import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 import {Food} from './food.model';
 
 @Injectable({
@@ -6,90 +9,25 @@ import {Food} from './food.model';
 })
 export class FoodService {
 
-  menu: Food[] = [
-    {
-      id: 1,
-      name: 'pizza',
-      description: 'Pepperoni',
-      category: 'food',
-      image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
-      price: 234,
-    },
-    {
-      id: 2,
-      name: 'pizza',
-      description: 'Pepperoni',
-      category: 'food',
-      image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
-      price: 234,
-    },
-    {
-      id: 3,
-      name: 'pizza',
-      description: 'Pepperoni',
-      category: 'food',
-      image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
-      price: 234,
-    },
-    {
-      id: 4,
-      name: 'pizza',
-      description: 'Pepperoni',
-      category: 'food',
-      image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
-      price: 234,
-    },
-    {
-      id: 5,
-      name: 'pizza',
-      description: 'Pepperoni',
-      category: 'food',
-      image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
-      price: 234,
-    },
-    {
-      id: 6,
-      name: 'pizza',
-      description: 'Pepperoni',
-      category: 'food',
-      image: 'https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9',
-      price: 234,
-    },
-  ];
+  API_URL: string = '';
 
-  constructor() {
+  constructor(private http: HttpClient) {
+    this.API_URL = `${environment.API_URL}`;
   }
 
-  // * Get all food.
-  public getAllFood(): Food[] {
-    return this.menu;
+  public getAll():Observable<Food[]> {
+    return this.http.get<Food[]>(this.API_URL+'food/all');
   }
 
-  // * Get one food.
-  public getOne(id: number): Food | undefined {
-    return this.menu.find(item => item.id == id);
+  public addFood(food: Food):Observable<Food> {
+    return this.http.post<Food>(this.API_URL+'food/save', food)
   }
 
-  // * Add new food.
-  public addFood(food: Food){
-    this.menu.push(food);
+  public deleteFood(deleteFood: Food):Observable<unknown> {
+    return this.http.delete(this.API_URL+'food/delete/'+deleteFood.id);
   }
 
-  // * Update food.
-  public updateFood(newFood: Food) {
-    this.menu.forEach((food, index) => {
-      if (food.id == newFood.id) {
-        this.menu[index] = newFood;
-      }
-    })
-  }
-
-  // * Delete food.
-  public deleteFood(deletedFood: Food) {
-    this.menu.forEach((food, index) => {
-      if (food.id == deletedFood.id) {
-        this.menu.splice(index, 1);
-      }
-    })
+  public getOne(id: number):Observable<Food> {
+    return this.http.get<Food>(this.API_URL+'food/find/'+id);
   }
 }

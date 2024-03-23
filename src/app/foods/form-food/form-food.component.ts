@@ -60,22 +60,16 @@ export class FormFoodComponent {
       this.edit = true;
       this.foodId = Number(this.activeRoute.snapshot.params['id']);
       console.log(this.foodId);
-      this.food = this.serviceFood.getOne(this.foodId);
-      if (this.food) {
-        this.form.patchValue({
-          name: this.food.name,
-          category: this.food.category,
-          description: this.food.description,
-          image: this.food.image,
-          price: this.food.price.toString()
-        })
-      }
+      this.serviceFood.getOne(this.foodId).subscribe({
+        next:(value) => (this.updateForm(value)),
+        error:(e) => console.error(e),
+        complete:() => console.info('complete')
+      })
     }
   }
 
   public sendData(){
     if (this.form.status == 'VALID') {
-
       if(this.getName?.value && this.getDescription?.value && this.getCategory?.value && this.getImage?.value && this.getPrice?.value){
         let priceNumber = Number(this.getPrice.value)
         let comida:Food = {
@@ -86,9 +80,25 @@ export class FormFoodComponent {
           price: priceNumber
         };
         console.log(comida);
-        this.serviceFood.addFood(comida);
+        this.serviceFood.addFood(comida).subscribe({
+          next:(value) => (this.food = value),
+          error:(e) => console.error(e),
+          complete:() => console.info('complete')
+        });
         this.router.navigate(['/food/food-list'])
       }
+    }
+  }
+
+  public updateForm(food: Food):void {
+    if (food) {
+      this.form.patchValue({
+        name: food.name,
+        category: food.category,
+        description: food.description,
+        image: food.image,
+        price: food.price.toString()
+      })
     }
   }
 
@@ -106,7 +116,11 @@ export class FormFoodComponent {
           price: priceNumber
         };
         console.log(comida);
-        this.serviceFood.updateFood(comida);
+        this.serviceFood.addFood(comida).subscribe({
+          next:(value) => (this.food = value),
+          error:(e) => console.error(e),
+          complete:() => console.info('complete')
+        });
         this.router.navigate(['/food/food-list'])
       }
     }
