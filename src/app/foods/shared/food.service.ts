@@ -16,18 +16,18 @@ export class FoodService {
   }
 
   public getAll():Observable<Food[]> {
-    return this.http.get<Food[]>(this.API_URL+'food/all');
+    return this.http.get<Food[]>(this.API_URL+'foods/all');
   }
 
   public addFood(food: Food):Observable<Food> {
-    return this.http.post<Food>(this.API_URL+'food/save', food)
+    return this.http.post<Food>(this.API_URL+'foods/save', food)
   }
 
   public deleteFood(deleteFood: Food):Observable<unknown> {
-    return this.http.delete(this.API_URL+'food/delete/'+deleteFood.id);
+    return this.http.delete(this.API_URL+'foods/delete/'+deleteFood.id);
   }
 
   public getOne(id: number):Observable<Food> {
-    return this.http.get<Food>(this.API_URL+'food/find/'+id);
+    return this.http.get<Food>(this.API_URL+'foods/find/'+id);
   }
 }
